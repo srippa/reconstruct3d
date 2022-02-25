@@ -1,0 +1,9 @@
+numpy
+tqdm
+pandas
+matplotlib
+scipy
+h5py
+easydict
+plotly
+

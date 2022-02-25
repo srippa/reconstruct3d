@@ -58,4 +58,6 @@ RUN git clone --recursive https://github.com/colmap/pycolmap.git
 RUN cd pycolmap &&  \
     pip3 install .
 
+COPY ./requirements_python.txt ./tmp/requirements_python.txt
 
+RUN pip3 install -r ./tmp/requirements_python.txt
