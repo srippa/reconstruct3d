@@ -1,0 +1,50 @@
+{
+  "name": "reconstruct3d",
+  "build": {
+    "dockerfile": "../reconstruct3d.docker",
+    "args": {
+      "username": "shmuel"
+    }
+  },
+  "containerEnv": {
+    "PYTHONPATH": "/workdir",
+  },
+  "remoteEnv": {
+    "PYTHONPATH": "${containerEnv:PYTHONPATH}",
+    "DISPLAY": "host.docker.internal:0"
+  },
+  "mounts": [
+    "source=/opt/models,target=/opt/models,type=bind,consistency=cached",
+    "source=/opt/datasets,target=/opt/datasets,type=bind,consistency=cached",
+    "source=/opt/project-artifacts,target=/opt/project-artifacts,type=bind,consistency=delegated"
+  ],
+  "runArgs": [
+    "--net=host", 
+    "-v", "/tmp/.X11-unix:/tmp/.X11-unix",      
+    "-e", "DISPLAY=host.docker.internal:0",
+    "--privileged", 
+    "--runtime=nvidia",
+    "-e", "NVIDIA_VISIBLE_DEVICES=1",
+    "--name",
+    "sh_hloc_colmap-gpu1"
+  ],
+  "settings": {
+    "terminal.integrated.defaultProfile.linux": "bash",
+  "appPort": [
+    "38888:8888",
+    "36006:6006"
+  ],
+  "workspaceFolder": "/workdir",
+  "workspaceMount": "source=${localEnv:HOME}/dvlp/reconstruction,target=/workdir,type=bind,consistency=delegated",
+  "postCreateCommand": "apt-get update && apt-get install -y x11-apps",
+  "extensions": [
+    "nickdemayo.vscode-json-editor",
+    "ms-python.vscode-pylance",
+    "ms-python.python",
+    "twxs.cmake",
+    "ms-vscode.cmake-tools",
+    "ms-vscode.cpptools",
+    "austin.code-gnu-global",
+    "njpwerner.autodocstring"
+  ]
+}}
