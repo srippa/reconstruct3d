@@ -1,19 +1,11 @@
 torch>=1.1
 torchvision>=0.3
 timm
-numpy
 opencv-python
-tqdm
-pandas
-matplotlib
-scipy
 kornia
 kornia_moons
-h5py
 git+https://github.com/cavalli1234/AdaLAM.git
 shapely
 geopy
-easydict
 pyproj
-plotly
 
