@@ -15,8 +15,11 @@ RUN apt-get update && apt-get install -y \
     libboost-system-dev \
     libboost-test-dev \
     libeigen3-dev \
+    libsqlite3-dev \
     libsuitesparse-dev \
+    libflann-dev \
     libfreeimage-dev \
+    libmetis-dev \
     libgoogle-glog-dev \
     libgflags-dev \
     libglew-dev \
@@ -27,7 +30,8 @@ RUN apt-get update && apt-get install -y \
 
 # Build and install ceres solver
 # Checkout the latest release
-ARG CERES_SOLVER_COMMIT=facb199f3e
+# ARG CERES_SOLVER_COMMIT=facb199f3e
+ARG CERES_SOLVER_COMMIT=f68321e
 RUN apt-get -y install libatlas-base-dev libsuitesparse-dev 
 RUN git clone https://ceres-solver.googlesource.com/ceres-solver
 RUN cd ceres-solver && \
@@ -39,12 +43,13 @@ RUN cd ceres-solver && \
 	make install
 
 # compile colmap
+ARG COLMAP_COMMIT=43de802
 RUN git clone https://github.com/colmap/colmap.git && \
     cd colmap && \
-    git checkout dev && \
+    git checkout "${COLMAP_COMMIT}" && \
     mkdir build && \
     cd build &&\
-    cmake .. &&\
+    cmake .. -DCMAKE_CUDA_ARCHITECTURES=all &&\
     make -j2 && \
     make install
 
@@ -54,8 +59,10 @@ RUN apt-get install python3 python3-pip unzip wget -y
 RUN pip3 install --upgrade pip
 
 # Install pycolmap from source
-RUN git clone --recursive https://github.com/colmap/pycolmap.git
+ARG PYCOLMAP_COMMIT=bdcdf47
+RUN git clone --recursive https://github.com/colmap/pycolmap.git 
 RUN cd pycolmap &&  \
+    git checkout  "${PYCOLMAP_COMMIT}"  &&\  
     pip3 install .
 
 COPY ./requirements_python.txt ./tmp/requirements_python.txt
